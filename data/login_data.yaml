@@ -3,18 +3,54 @@ login_cases:
     username: "emilys"
     password: "emilyspass"
     expected_status: 200
+    expect_token: true
 
-  - name: "错误的用户名"
-    username: "wronguser"
-    password: "emilyspass"
-    expected_status: 400
-
-  - name: "错误的密码"
+  - name: "正确的用户名，错误的密码"
     username: "emilys"
     password: "wrongpass"
     expected_status: 400
+    expected_message: "Invalid credentials"
 
-  - name: "空用户名"
+  - name: "用户名不存在"
+    username: "nonexist"
+    password: "anypass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+
+  - name: "用户名为空"
     username: ""
     password: "emilyspass"
     expected_status: 400
+    expected_message: "username and password required"
+
+  - name: "密码为空"
+    username: "emilys"
+    password: ""
+    expected_status: 400
+    expected_message: "username and password required"
+
+  - name: "用户名和密码都为空"
+    username: ""
+    password: ""
+    expected_status: 400
+    expected_message: "username and password required"
+
+  - name: "用户名含特殊字符（SQL注入试探）"
+    username: "' OR '1'='1"
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码含特殊字符"
+    username: "emilys"
+    password: "' OR '1'='1"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "已封禁账号登录（模拟）"
+    username: "banned_user"
+    password: "bannedpass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+

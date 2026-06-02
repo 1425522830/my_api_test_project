@@ -1,6 +1,5 @@
 requests
 pytest
-pytest-html
 pyyaml
 allure-pytest
-tenacity
+pymysql

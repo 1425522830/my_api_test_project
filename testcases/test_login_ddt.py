@@ -1,9 +1,10 @@
-# testcases/test_login_ddt.py
+# 测试登录接口（数据驱动），对登录接口进行参数化测试，覆盖正向与异常场景。
+
 import allure
 import pytest
-import requests
 from config.settings import BASE_URL
 from common.yaml_util import get_login_data
+from common.session_client import SessionClient
 
 @allure.feature("登录模块")
 class TestLoginDDT:
@@ -13,15 +14,28 @@ class TestLoginDDT:
         with allure.step(f"准备测试数据: {case['name']}"):
             username = case["username"]
             password = case["password"]
-            expected = case["expected_status"]
+            expected_status = case["expected_status"]
+            expected_message = case.get("expected_message", None)
+            expect_token = case.get("expect_token", False)
 
         with allure.step("发送登录请求"):
-            resp = requests.post(
-                f"{BASE_URL}/auth/login",
-                json={"username": username, "password": password}
-            )
+            client = SessionClient(base_url=BASE_URL)
+            resp = client.post("/auth/login", json={"username": username, "password": password})
 
         with allure.step("校验状态码"):
-            assert resp.status_code == expected, f"用例 {case['name']} 失败"
+            assert resp.status_code == expected_status, f"用例 {case['name']} 状态码不符"
+
+        if expect_token:
+            with allure.step("校验返回 token"):
+                resp_json = resp.json()
+                assert "accessToken" in resp_json, "登录成功但未返回 token"
+                assert resp_json["accessToken"], "token 为空"
+        elif expected_message is not None:
+            with (allure.step("校验返回消息")):
+                resp_json = resp.json()
+                actual_msg = resp_json.get("message", "")
+                # 忽略大小写和首尾空格（给编写用例留有容错）
+                assert expected_message.lower().strip() == actual_msg.lower().strip(),  \
+                    f"预期消息：{expected_message}，实际：{actual_msg}"
 
         allure.attach(str(resp.json()), name="响应内容", attachment_type=allure.attachment_type.JSON)
