@@ -26,7 +26,7 @@
 
 ###### &#x09;1. 克隆项目  
 
-&#x20;  `	 	git clone https://github.com/1425522830/my\_api\_test\_project.git`
+&#x20;  `	 	git clone https://github.com/1425522830/my_api_test_project.git`
 
 
 
