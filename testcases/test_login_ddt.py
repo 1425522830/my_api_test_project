@@ -12,15 +12,19 @@ class TestLoginDDT:
     @pytest.mark.parametrize("case", get_login_data())
     def test_login(self, case):
         with allure.step(f"准备测试数据: {case['name']}"):
-            username = case["username"]
-            password = case["password"]
+            payload = {}                # 动态构建请求体，只包含存在的字段
+            if "username" in case:
+                payload["username"] = case["username"]
+            if "password" in case:
+                payload["password"] = case["password"]
+
             expected_status = case["expected_status"]
             expected_message = case.get("expected_message", None)
             expect_token = case.get("expect_token", False)
 
         with allure.step("发送登录请求"):
             client = SessionClient(base_url=BASE_URL)
-            resp = client.post("/auth/login", json={"username": username, "password": password})
+            resp = client.post("/auth/login", json=payload)     # 如果两个字段都不存在，payload 为空对象，API 应返回 400
 
         with allure.step("校验状态码"):
             assert resp.status_code == expected_status, f"用例 {case['name']} 状态码不符"

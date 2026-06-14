@@ -1,0 +1,26 @@
+auth_tests:
+  - name: "获取当前用户信息（有效token）"
+    endpoint: "/auth/me"
+    expected_status: 200
+    check_username: true
+
+  - name: "获取购物车（有效token，需动态获取user_id）"
+    endpoint: "/carts/user/{user_id}"
+    expected_status: 200
+    dynamic_user_id: true
+    check_carts: true
+
+  - name: "无效token访问"
+    use_invalid_token: true
+    endpoint: "/auth/me"
+    expected_status: 401
+
+  - name: "不带token"
+    no_token: true
+    endpoint: "/auth/me"
+    expected_status: 401
+
+  - name: "token格式错误（使用完全错误的token）"
+    use_bad_token_format: true
+    endpoint: "/auth/me"
+    expected_status: 401

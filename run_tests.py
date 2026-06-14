@@ -17,12 +17,12 @@ def main():
 
     try:
         subprocess.run("allure serve ./allure-results", shell=True, check=True)
+    except FileNotFoundError:
+        print("Allure 未安装或不在 PATH 中。请安装 Allure 并添加到环境变量。")
+        print("你可以手动运行: allure serve ./allure-results")
     except KeyboardInterrupt:
         print("\nAllure server stopped. Exiting gracefully.")
         sys.exit(0)
-    except subprocess.CalledProcessError:
-        print("Failed to run allure command. Make sure Allure is installed and in PATH.")
-        print("You can manually run: allure serve ./allure-results")
 
 if __name__ == "__main__":
     main()

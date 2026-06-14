@@ -1,0 +1,13 @@
+# 数据库访问层测试数据
+db_tests:
+  - name: "插入数据并回滚"
+    username: "test_rollback"
+    email: "rollback@example.com"
+    expect_success: true
+    check_rollback: true
+
+  - name: "插入数据后查询验证"
+    username: "test_query"
+    email: "query@example.com"
+    expect_success: true
+    check_rollback: false

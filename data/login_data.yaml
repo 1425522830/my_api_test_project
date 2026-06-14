@@ -17,7 +17,6 @@ login_cases:
     expected_status: 400
     expected_message: "Invalid credentials"
 
-
   - name: "用户名为空"
     username: ""
     password: "emilyspass"
@@ -36,21 +35,177 @@ login_cases:
     expected_status: 400
     expected_message: "username and password required"
 
-  - name: "用户名含特殊字符（SQL注入试探）"
+  - name: "用户名含SQL注入单引号"
     username: "' OR '1'='1"
     password: "emilyspass"
     expected_status: 400
     expected_message: "Invalid credentials"
 
-  - name: "密码含特殊字符"
+  - name: "密码含SQL注入"
     username: "emilys"
     password: "' OR '1'='1"
     expected_status: 400
     expected_message: "Invalid credentials"
 
-  - name: "已封禁账号登录（模拟）"
+  - name: "已封禁账号（模拟）"
     username: "banned_user"
     password: "bannedpass"
     expected_status: 400
     expected_message: "Invalid credentials"
 
+  - name: "用户名前后有空格"
+    username: "  emilys  "
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码前后有空格"
+    username: "emilys"
+    password: "  emilyspass  "
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名超长（300字符）"
+    username: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码超长（300字符）"
+    username: "emilys"
+    password: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名含emoji"
+    username: "😀emilys"
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码含emoji"
+    username: "emilys"
+    password: "😀😀😀"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名全大写（经测试此API不区分大小写，expected_status实测为200）"
+    username: "EMILYS"
+    password: "emilyspass"
+    expected_status: 200
+    expect_token: true
+
+  - name: "用户名正确大小写"
+    username: "emilys"
+    password: "emilyspass"
+    expected_status: 200
+    expect_token: true
+
+  - name: "请求体为空对象"
+    username: null
+    password: null
+    expected_status: 400
+    expected_message: "username and password required"
+
+  - name: "username字段缺失"
+    missing_username: true
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "username and password required"
+
+  - name: "password字段缺失"
+    username: "emilys"
+    missing_password: true
+    expected_status: 400
+    expected_message: "username and password required"
+
+  - name: "username为数字类型"
+    username: 12345
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Username is not valid"
+
+  - name: "password为数字类型"
+    username: "emilys"
+    password: 123456
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "SQL注入 sleep"
+    username: "' OR SLEEP(5) --"
+    password: "anything"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "SQL注入 union"
+    username: "' UNION SELECT null,null --"
+    password: "x"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "XSS尝试"
+    username: "<script>alert(1)</script>"
+    password: "pass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名纯数字字符串"
+    username: "123456"
+    password: "pass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码纯数字字符串"
+    username: "emilys"
+    password: "123456"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名含斜杠"
+    username: "emilys/"
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码含斜杠"
+    username: "emilys"
+    password: "pass/word"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "高频登录（单次，仅占位）"
+    username: "emilys"
+    password: "emilyspass"
+    expected_status: 200
+    expect_token: true
+    skip_reason: "限流需多次请求，单独测试"
+
+  - name: "用户名首尾有多个空格"
+    username: "   emilys   "
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码首尾有多个空格"
+    username: "emilys"
+    password: "   emilyspass   "
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名包含换行符"
+    username: "emilys\n"
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "密码包含制表符"
+    username: "emilys"
+    password: "emilyspass\t"
+    expected_status: 400
+    expected_message: "Invalid credentials"
+
+  - name: "用户名包含中文"
+    username: "用户emilys"
+    password: "emilyspass"
+    expected_status: 400
+    expected_message: "Invalid credentials"
