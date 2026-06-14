@@ -44,7 +44,7 @@
 
 ###### &#x09;4. 运行测试  
 
-&#x20;  		`python run\_tests.py`
+&#x20;  		`python run_tests.py`
 
 
 
