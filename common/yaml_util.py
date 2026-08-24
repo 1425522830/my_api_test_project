@@ -1,18 +1,36 @@
-# 读取YAML格式数据文件，主要实现YAML文件解析功能，将测试数据转换为 Python 字典供数据驱动使用。
-
 import yaml
-import os
+from pathlib import Path
 
-# 解析为python字典
 def read_yaml(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        data = yaml.safe_load(f)
-        print(f"DEBUG: read_yaml from {file_path} -> {data}")  # 添加这行
-        return data
+    try:
+        with open(file_path, encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return data if data is not None else {}
+    except FileNotFoundError:
+        raise FileNotFoundError(f"YAML文件不存在：{file_path}")
+    except Exception as e:
+        raise Exception(f"解析YAML失败：{str(e)}")
 
-def get_login_data():
-    # 便于代码移植，但依赖项目目录结构的固定层级
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))      # 得到根目录
-    yaml_path = os.path.join(base_dir, 'data', 'login_data.yaml')               # 目录拼接
-    data = read_yaml(yaml_path) or {}       # 返回解析成python格式的文本内容
-    return data.get('login_cases', [])
+def _get_cases(file_name, key):
+    root_dir = Path(__file__).parent.parent
+    yaml_path = root_dir / "data" / file_name
+    yaml_data = read_yaml(yaml_path)
+    return yaml_data.get(key, [])
+
+# 认证模块读取器
+def get_login_case():
+    return _get_cases("auth_data.yaml", "login_cases")
+def get_register_case():
+    return _get_cases("auth_data.yaml", "register_cases")
+def get_forgot_pwd_case():
+    return _get_cases("auth_data.yaml", "forgot_pwd_cases")
+
+# 个人信息模块读取器
+def get_user_info_cases():
+    return _get_cases("personal_info_data.yaml", "user_info_cases")
+def get_user_settings_cases():
+    return _get_cases("personal_info_data.yaml", "user_settings_cases")
+def get_notification_privacy_cases():
+    return _get_cases("personal_info_data.yaml", "notification_privacy_cases")
+def get_security_cases():
+    return _get_cases("personal_info_data.yaml", "security_cases")

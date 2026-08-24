@@ -1,0 +1,191 @@
+user_info_cases:
+  - case_name: "个人中心-查询我的回复"
+    operate: get_my_replies
+    expect_status: 200
+  - case_name: "个人中心-查询我的主题"
+    operate: get_my_discussions
+    expect_status: 200
+  - case_name: "个人中心-查询我点赞的内容"
+    operate: get_my_liked
+    expect_status: 200
+  - case_name: "个人中心-查询我的上传文件"
+    operate: get_my_uploads
+    expect_status: 200
+  - case_name: "个人中心-查询被@提及内容"
+    operate: get_my_mentions
+    expect_status: 200
+
+# 个人设置-更改昵称测试用例
+user_settings_cases:
+  - case_name: "正常更改昵称-成功"
+    nickname: "新的测试昵称"
+    bio: ""
+    expect_status: 200
+
+  - case_name: "清空昵称-实际允许（返回200）"
+    nickname: ""
+    bio: ""
+    expect_status: 200
+
+  - case_name: "昵称超长-报错"
+    nickname: "这是一个非常非常非常非常非常非常非常非常非常长的昵称测试用例"
+    bio: ""
+    expect_status: 200
+
+  - case_name: "只改个人简介"
+    nickname: "溯笙"
+    bio: "这是我的全新个人简介！"
+    expect_status: 200
+
+notification_privacy_cases:
+  # 我的主题标题被更改 (通知 & 邮件)
+  - case_name: "开启-我的主题标题被更改(通知)"
+    preference_key: "notify_discussionRenamed_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-我的主题标题被更改(通知)"
+    preference_key: "notify_discussionRenamed_alert"
+    preference_value: false
+    expect_status: 200
+  - case_name: "开启-我的主题标题被更改(邮件)"
+    preference_key: "notify_discussionRenamed_email"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-我的主题标题被更改(邮件)"
+    preference_key: "notify_discussionRenamed_email"
+    preference_value: false
+    expect_status: 200
+
+  # 我关注的主题有新回复 (通知 & 邮件)
+  - case_name: "开启-我关注的主题有新回复(通知)"
+    preference_key: "notify_newPost_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-我关注的主题有新回复(通知)"
+    preference_key: "notify_newPost_alert"
+    preference_value: false
+    expect_status: 200
+  - case_name: "开启-我关注的主题有新回复(邮件)"
+    preference_key: "notify_newPost_email"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-我关注的主题有新回复(邮件)"
+    preference_key: "notify_newPost_email"
+    preference_value: false
+    expect_status: 200
+
+  # 有人回复了我 (通知 & 邮件)
+  - case_name: "开启-有人回复了我(通知)"
+    preference_key: "notify_postMentioned_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人回复了我(通知)"
+    preference_key: "notify_postMentioned_alert"
+    preference_value: false
+    expect_status: 200
+  - case_name: "开启-有人回复了我(邮件)"
+    preference_key: "notify_postMentioned_email"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人回复了我(邮件)"
+    preference_key: "notify_postMentioned_email"
+    preference_value: false
+    expect_status: 200
+
+  # 有人提到了我 (通知 & 邮件)
+  - case_name: "开启-有人提到了我(通知)"
+    preference_key: "notify_userMentioned_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人提到了我(通知)"
+    preference_key: "notify_userMentioned_alert"
+    preference_value: false
+    expect_status: 200
+  - case_name: "开启-有人提到了我(邮件)"
+    preference_key: "notify_userMentioned_email"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人提到了我(邮件)"
+    preference_key: "notify_userMentioned_email"
+    preference_value: false
+    expect_status: 200
+
+  # 有人在帖子中提到了我在的组 (通知 & 邮件)
+  - case_name: "开启-有人提及我的群组(通知)"
+    preference_key: "notify_groupMentioned_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人提及我的群组(通知)"
+    preference_key: "notify_groupMentioned_alert"
+    preference_value: false
+    expect_status: 200
+  - case_name: "开启-有人提及我的群组(邮件)"
+    preference_key: "notify_groupMentioned_email"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人提及我的群组(邮件)"
+    preference_key: "notify_groupMentioned_email"
+    preference_value: false
+    expect_status: 200
+
+  # 我的主题帖被锁定 (通知)
+  - case_name: "开启-我的主题帖被锁定(通知)"
+    preference_key: "notify_discussionLocked_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-我的主题帖被锁定(通知)"
+    preference_key: "notify_discussionLocked_alert"
+    preference_value: false
+    expect_status: 200
+
+  # 有人赞我 (通知)
+  - case_name: "开启-有人赞我(通知)"
+    preference_key: "notify_postLiked_alert"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-有人赞我(通知)"
+    preference_key: "notify_postLiked_alert"
+    preference_value: false
+    expect_status: 200
+
+  # 底部按钮/开关
+  - case_name: "开启-自动关注我回复的主题"
+    preference_key: "followAfterReply"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-自动关注我回复的主题"
+    preference_key: "followAfterReply"
+    preference_value: false
+    expect_status: 200
+
+  - case_name: "开启-通知每一个新帖而非仅最后一个"
+    preference_key: "flarum-subscriptions.notify_for_all_posts"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-通知每一个新帖而非仅最后一个"
+    preference_key: "flarum-subscriptions.notify_for_all_posts"
+    preference_value: false
+    expect_status: 200
+
+  # 隐私设置
+  - case_name: "开启-公开我的在线状态"
+    preference_key: "discloseOnline"
+    preference_value: true
+    expect_status: 200
+  - case_name: "关闭-公开我的在线状态"
+    preference_key: "discloseOnline"
+    preference_value: false
+    expect_status: 200
+
+security_cases:
+  - case_name: "终止指定的活动会话"
+    token_id: 7847
+    expect_status: 404                  # 不建议接口自动化测此用例，对应 id 终止过后就不存在了
+
+  - case_name: "终止不存在或者已过期的会话"
+    token_id: 999999
+    expect_status: 404
+
+  - case_name: "终止所有其他会话"
+    action: "revoke_all"
+    expect_status: 204

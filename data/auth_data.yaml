@@ -1,26 +1,106 @@
-auth_tests:
-  - name: "获取当前用户信息（有效token）"
-    endpoint: "/auth/me"
-    expected_status: 200
-    check_username: true
+# 登录接口用例
+login_cases:
+    - name: "正确账号密码-登录成功 remember=false"
+      identification: "1425522830@qq.com"
+      password: "6666666666"
+      remember: false
+      expect_status: 200
 
-  - name: "获取购物车（有效token，需动态获取user_id）"
-    endpoint: "/carts/user/{user_id}"
-    expected_status: 200
-    dynamic_user_id: true
-    check_carts: true
+    - name: "正确账号密码-记住登录 remember=true"
+      identification: "1425522830@qq.com"
+      password: "6666666666"
+      remember: true
+      expect_status: 200
 
-  - name: "无效token访问"
-    use_invalid_token: true
-    endpoint: "/auth/me"
-    expected_status: 401
+    - name: "账号未注册不存在"
+      identification: "test99999@shturl."
+      password: "6666666666"
+      remember: false
+      expect_status: 401
 
-  - name: "不带token"
-    no_token: true
-    endpoint: "/auth/me"
-    expected_status: 401
+    - name: "密码错误-登录失败"
+      identification: "1425522830@qq.com"
+      password: "wrongpass123"
+      remember: false
+      expect_status: 401
 
-  - name: "token格式错误（使用完全错误的token）"
-    use_bad_token_format: true
-    endpoint: "/auth/me"
-    expected_status: 401
+    - name: "账号为空，参数非法"
+      identification: ""
+      password: "66666666666"
+      remember: false
+      expect_status: 401
+
+    - name: "密码为空，参数非法"
+      identification: "1425522830@qq.com"
+      password: ""
+      remember: false
+      expect_status: 401
+
+    - name: "账号密码均为空"
+      identification: ""
+      password: ""
+      remember: false
+      expect_status: 401
+
+    - name: "账号超长，参数非法"
+      identification: "aaaaaabbbbbbccccccdddddeeeeeefffffffgggggg"
+      password: "6666666666"
+      remember: false
+      expect_status: 401
+
+forgot_pwd_cases:
+      - case_name: "未登录-传入已注册邮箱请求重置密码"
+        email: "142552283@qq.com"
+        expect_status: 204
+
+      - case_name: "未登录-传入系统不存在邮箱，依然返回204（安全设计）"
+        email: "no_user@test.com"
+        expect_status: 204
+
+      - case_name: "未登录-不传邮箱参数"
+        email: ""
+        expect_status: 422
+
+register_cases:
+  - case_name: "邮箱已存在"
+    username: "1425522830@qq.com"
+    email: "1425522830@qq.com"
+    nickname: "测试用户01"
+    password: "Aa123456"
+    expect_status: 422
+
+  - case_name: "邮箱格式非法"
+    username: "demo003"
+    email: "bad-email"
+    nickname: "测试用户03"
+    password: "Aa123456"
+    expect_status: 422
+
+  - case_name: "密码过短"
+    username: "demo002"
+    email: "fake1@test.com"
+    nickname: "测试用户02"
+    password: "123"
+    expect_status: 422
+
+  - case_name: "密码为空"
+    username: "demo006"
+    email: "fake6@test.com"
+    nickname: "测试用户06"
+    password: ""
+    expect_status: 422
+
+  - case_name: "用户名为空"
+    username: ""
+    email: "fake2@test.com"
+    nickname: "测试用户04"
+    password: "Aa123456"
+    expect_status: 422
+
+  - case_name: "昵称为空"
+    username: "demo005"
+    email: "fake5@test.com"
+    nickname: ""
+    password: "Aa123456"
+    expect_status: 422
+

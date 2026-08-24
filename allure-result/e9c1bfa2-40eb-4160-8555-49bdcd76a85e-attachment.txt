@@ -1,0 +1,1 @@
+{'flarum-subscriptions.notify_for_all_posts': True}
