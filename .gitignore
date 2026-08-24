@@ -13,3 +13,6 @@ allure-results/
 # 系统文件
 .DS_Store
 Thumbs.db
+#个人笔记
+.经验
+.思维
