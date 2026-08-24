@@ -1,1 +1,0 @@
-{'notify_postMentioned_email': True}

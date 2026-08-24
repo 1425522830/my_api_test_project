@@ -1,18 +1,25 @@
-# 编译缓存和Python环境
-__pycache__/
-.pytest_cache/
-*.pyc
+# 虚拟环境
 .venv/
 venv/
-# allure报告目录
+env/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.pyo
+
+# 测试运行生成的临时结果和报告
+allure-result/
 allure-report/
-allure-results/
-# IDE配置
+.pytest_cache/
+
+# 编辑器配置
 .idea/
 .vscode/
-# 系统文件
-.DS_Store
-Thumbs.db
+
+# 敏感配置文件（如果有的话，比如本地密码，强烈建议加上）
+# config/local_settings.py
+
 #个人笔记
-.经验
-.思维
+经验.txt
+思维.txt

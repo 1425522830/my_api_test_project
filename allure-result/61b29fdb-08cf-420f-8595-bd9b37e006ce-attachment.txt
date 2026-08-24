@@ -1,1 +1,0 @@
-{'notify_userMentioned_email': True}

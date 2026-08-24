@@ -1,1 +1,0 @@
-{"errors":[{"status":"422","code":"validation_error","detail":"\u7528\u6237\u540d\u53ea\u80fd\u7531\u5b57\u6bcd\u3001\u6570\u5b57\u53ca\u8fde\u5b57\u7b26 (-) \u7ec4\u6210","source":{"pointer":"\/data\/attributes\/username"}},{"status":"422","code":"validation_error","detail":"email \u4e0d\u80fd\u4e3a\u7a7a\u3002","source":{"pointer":"\/data\/attributes\/email"}}]}
