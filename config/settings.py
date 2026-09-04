@@ -25,4 +25,4 @@ API_AVATAR = "/avatar"                              # 头像上传路径
 
 API_POSTS = "/api/posts"                            # 帖子/回复相关接口
 API_DISCUSSIONS = "/api/discussions"                # 主题讨论相关接口
-API_FOF_UPLOADS = "/api/fof/uploads"                # 上传文件相关接口
+

@@ -34,3 +34,11 @@ def get_notification_privacy_cases():
     return _get_cases("personal_info_data.yaml", "notification_privacy_cases")
 def get_security_cases():
     return _get_cases("personal_info_data.yaml", "security_cases")
+
+# 帖子模块
+def get_post_cases():
+    return _get_cases("posts_data.yaml", "post_cases")
+
+# 读取评论模块测试用例
+def get_comment_cases():
+    return _get_cases("comments_data.yaml", "comment_cases")

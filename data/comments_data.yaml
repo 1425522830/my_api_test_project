@@ -1,0 +1,12 @@
+comment_cases:
+  - case_name: "正常发表评论"
+    content: "这是一条测试评论"
+    expect_status: 201
+
+  - case_name: "发表空评论-报错"
+    content: ""
+    expect_status: 422
+
+  - case_name: "发表超长评论-报错"
+    content: "这是一条超长评论"
+    expect_status: 422

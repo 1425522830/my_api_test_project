@@ -1,0 +1,68 @@
+post_cases:
+  # ==================== 发帖-正向与参数校验 ====================
+  - case_name: "正常发帖-成功"
+    operate: "create"
+    title: "接口自动化测试帖"
+    content: "这是通过接口自动化测试发布的帖子内容。"
+    tag_ids: [ 4, 5 ]
+    expect_status: 201
+
+  - case_name: "发帖-空标题-校验失败"
+    operate: "create"
+    title: ""
+    content: "有内容但没标题"
+    tag_ids: [ 4, 5 ]
+    expect_status: 422
+
+  - case_name: "发帖-超长标题-校验失败"
+    operate: "create"
+    title: "超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例超长标题测试用例"
+    content: "测试超长标题边界"
+    tag_ids: [ 4, 5 ]
+    expect_status: 422
+
+  - case_name: "发帖-缺少正文内容-校验失败"
+    operate: "create"
+    title: "只有标题没有内容"
+    content: ""
+    tag_ids: [ 4, 5 ]
+    expect_status: 422
+
+  - case_name: "发帖-未登录-权限校验"
+    operate: "create_unauth"
+    title: "未登录发帖"
+    content: "应该被拒绝"
+    tag_ids: [ 4, 5 ]
+    expect_status: 403   # 如果你未登录发帖，它不会给你抛 401（让你去登录），而是直接判定你为“游客角色”，由于游客没有发帖权限，所以直接返回了 403。
+
+  # ==================== 列表浏览-分页与排序 ====================
+  - case_name: "列表浏览-默认排序-成功"
+    operate: "list"
+    page_offset: 0
+    sort: "-lastPostedAt"
+    tag_ids: [ 4, 5 ]
+    expect_status: 200
+
+  - case_name: "列表浏览-正向排序-成功"
+    operate: "list"
+    page_offset: 0
+    sort: "lastPostedAt"
+    expect_status: 200
+
+  - case_name: "列表浏览-偏移量翻页-成功"
+    operate: "list"
+    page_offset: 10
+    sort: "-lastPostedAt"
+    expect_status: 200
+
+  - case_name: "列表浏览-超大偏移量-成功(空数据)"
+    operate: "list"
+    page_offset: 99999
+    sort: "-lastPostedAt"
+    expect_status: 200
+
+  # ==================== 详情查看-边界与异常 ====================
+  - case_name: "详情查看-不存在的帖子-报错"
+    operate: "detail_not_found"
+    discussion_id: 999999999
+    expect_status: 404        

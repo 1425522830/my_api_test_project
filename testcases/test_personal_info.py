@@ -5,7 +5,7 @@ from common.yaml_util import (
     get_user_info_cases,
     get_user_settings_cases,
     get_notification_privacy_cases,
-    get_security_cases,
+    get_security_cases
 )
 
 

@@ -1,11 +1,9 @@
-from config.settings import API_LOGIN, API_REGISTER, API_FORGOT, API_POSTS, API_DISCUSSIONS, API_FOF_UPLOADS, \
-    REQ_TIMEOUT, API_USERS, API_ACCESS_TOKENS, API_SESSIONS, API_AVATAR
+from config.settings import API_LOGIN, API_REGISTER, API_FORGOT, REQ_TIMEOUT, API_USERS,API_ACCESS_TOKENS, API_SESSIONS
 
 # 用户模块接口封装
 class UserApi:
     def __init__(self, client):
         self.client = client        # 组合注入HTTP会话客户端，解耦优于继承
-
     # 登录接口
     def login(self, identification, password, remember=False):
         req_body = {
