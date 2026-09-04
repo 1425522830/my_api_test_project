@@ -1,106 +1,95 @@
-# 登录接口用例
-login_cases:
-    - name: "正确账号密码-登录成功 remember=false"
-      identification: "1425522830@qq.com"
-      password: "6666666666"
-      remember: false
-      expect_status: 200
+auth_login_cases:
+  - case_name: "登录成功-记住登录状态"
+    description: "使用合法账号和密码登录，并勾选记住密码"
+    identification: "1425522830@qq.com"
+    password: "6666666666"
+    remember: true
+    expect_status: 200
+  - case_name: "登录成功-不记住登录状态"
+    identification: "1425522830@qq.com"
+    password: "6666666666"
+    remember: false
+    expect_status: 200
+  - case_name: "登录失败-账号未注册"
+    identification: "test99999@shturl."
+    password: "6666666666"
+    remember: false
+    expect_status: 401
+  - case_name: "登录失败-密码错误"
+    identification: "1425522830@qq.com"
+    password: "wrongpass123"
+    remember: false
+    expect_status: 401
+  - case_name: "登录失败-密码大小写敏感"
+    identification: "1425522830@qq.com"
+    password: "6666666666"
+    expect_status: 401
+  - case_name: "登录失败-账号为空"
+    identification: ""
+    password: "6666666666"
+    remember: false
+    expect_status: 401
+  - case_name: "登录失败-密码为空"
+    identification: "1425522830@qq.com"
+    password: ""
+    remember: false
+    expect_status: 401
+  - case_name: "登录失败-账号带前后空格"
+    identification: " 1425522830@qq.com "
+    password: "6666666666"
+    remember: false
+    expect_status: 401
+  - case_name: "登录失败-账号超长"
+    identification: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    password: "6666666666"
+    remember: false
+    expect_status: 401
 
-    - name: "正确账号密码-记住登录 remember=true"
-      identification: "1425522830@qq.com"
-      password: "6666666666"
-      remember: true
-      expect_status: 200
-
-    - name: "账号未注册不存在"
-      identification: "test99999@shturl."
-      password: "6666666666"
-      remember: false
-      expect_status: 401
-
-    - name: "密码错误-登录失败"
-      identification: "1425522830@qq.com"
-      password: "wrongpass123"
-      remember: false
-      expect_status: 401
-
-    - name: "账号为空，参数非法"
-      identification: ""
-      password: "66666666666"
-      remember: false
-      expect_status: 401
-
-    - name: "密码为空，参数非法"
-      identification: "1425522830@qq.com"
-      password: ""
-      remember: false
-      expect_status: 401
-
-    - name: "账号密码均为空"
-      identification: ""
-      password: ""
-      remember: false
-      expect_status: 401
-
-    - name: "账号超长，参数非法"
-      identification: "aaaaaabbbbbbccccccdddddeeeeeefffffffgggggg"
-      password: "6666666666"
-      remember: false
-      expect_status: 401
-
-forgot_pwd_cases:
-      - case_name: "未登录-传入已注册邮箱请求重置密码"
-        email: "142552283@qq.com"
-        expect_status: 204
-
-      - case_name: "未登录-传入系统不存在邮箱，依然返回204（安全设计）"
-        email: "no_user@test.com"
-        expect_status: 204
-
-      - case_name: "未登录-不传邮箱参数"
-        email: ""
-        expect_status: 422
-
-register_cases:
-  - case_name: "邮箱已存在"
+auth_register_cases:
+  - case_name: "注册异常-邮箱已存在"
     username: "1425522830@qq.com"
     email: "1425522830@qq.com"
     nickname: "测试用户01"
     password: "Aa123456"
     expect_status: 422
-
-  - case_name: "邮箱格式非法"
+  - case_name: "注册异常-邮箱格式非法"
     username: "demo003"
     email: "bad-email"
     nickname: "测试用户03"
     password: "Aa123456"
     expect_status: 422
-
-  - case_name: "密码过短"
+  - case_name: "注册异常-密码过短"
     username: "demo002"
     email: "fake1@test.com"
     nickname: "测试用户02"
     password: "123"
     expect_status: 422
-
-  - case_name: "密码为空"
+  - case_name: "注册异常-密码为空"
     username: "demo006"
     email: "fake6@test.com"
     nickname: "测试用户06"
     password: ""
     expect_status: 422
-
-  - case_name: "用户名为空"
+  - case_name: "注册异常-用户名为空"
     username: ""
     email: "fake2@test.com"
     nickname: "测试用户04"
     password: "Aa123456"
     expect_status: 422
-
-  - case_name: "昵称为空"
+  - case_name: "注册异常-昵称为空"
     username: "demo005"
     email: "fake5@test.com"
     nickname: ""
     password: "Aa123456"
     expect_status: 422
 
+auth_forgot_cases:
+  - case_name: "忘记密码-已注册邮箱发送成功"
+    email: "1425522830@qq.com"
+    expect_status: 204
+  - case_name: "忘记密码-未注册邮箱返回204"
+    email: "no_user@test.com"
+    expect_status: 204
+  - case_name: "忘记密码-不传邮箱参数"
+    email: ""
+    expect_status: 422

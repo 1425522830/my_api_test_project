@@ -1,32 +1,56 @@
 import pytest
 from common.session_client import SessionClient
 from api.user_api import UserApi
-from config.settings import TEST_ACCOUNT, TEST_PWD
+from api.post_api import PostApi
+from config.settings import TEST_ACCOUNT, TEST_PWD, TEST_ACCOUNT_B, TEST_PWD_B
 
-# 不需要登录的查询接口（用于注册、未登录异常测等）
 @pytest.fixture(scope="function")
 def raw_client():
     c = SessionClient()
     yield c
 
-# 需要登录态的业务接口（用于个人信息、已登录操作等）
 @pytest.fixture(scope="session")
 def login_client():
     c = SessionClient()
     api = UserApi(c)
-    login_resp = api.login(TEST_ACCOUNT, TEST_PWD)      # 执行一次登录操作
-
-    # 状态码校验
-    assert login_resp.status_code == 200, f"登录失败：状态码异常 {login_resp.status_code}, 内容：{login_resp.text}"
-
-    # 接口实际报错拦截（即便返回 200，也检查有无 errors 字段）
+    login_resp = api.login(TEST_ACCOUNT, TEST_PWD)
+    assert login_resp.status_code == 200, f"登录失败：{login_resp.text}"
     resp_json = login_resp.json()
     if "errors" in resp_json:
         assert False, f"登录接口隐藏报错：{resp_json['errors']}"
-
-    # 核心数据字段验证
-    # 这里直接提取 'userId' 而不是 'data'['id']，这才是此论坛环境的真实返回结构
     if "userId" not in resp_json:
-        raise AssertionError(f"登录响应成功但缺少 'userId' 字段！请检查：实际返回的 JSON 是 {resp_json}")
+        raise AssertionError(f"登录响应成功但缺少 'userId' 字段！请检查：{resp_json}")
     uid = resp_json["userId"]
-    yield (api, uid)            # 直接返回一个元组，不再返回字典
+    yield (api, uid)
+
+@pytest.fixture(scope="session")
+def login_client_b():
+    if not TEST_ACCOUNT_B or not TEST_PWD_B:
+        pytest.skip("未配置测试账号B，跳过越权测试")
+    c = SessionClient()
+    api = UserApi(c)
+    login_resp = api.login(TEST_ACCOUNT_B, TEST_PWD_B)
+    if login_resp.status_code != 200:
+        pytest.skip("测试账号B登录失败，跳过越权测试")
+    yield (api, login_resp.json()["userId"])
+
+@pytest.fixture(scope="function")
+def new_discussion(login_client):
+    api, current_uid = login_client
+    post_api = PostApi(api.client)
+    tag_id = post_api.get_primary_tag_id()
+    created_id = None
+    first_post_id = None
+
+    resp = post_api.create_discussion("动态夹具帖", "自动生成", tag_ids=[tag_id])
+    if resp.status_code == 201:
+        created_id = resp.json()["data"]["id"]
+        first_post_id = post_api.get_first_post_id(created_id)
+
+    yield {"post_api": post_api, "created_id": created_id, "first_post_id": first_post_id}
+
+    if created_id:
+        try:
+            post_api.delete_discussion(created_id)
+        except Exception:
+            pass

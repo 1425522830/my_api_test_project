@@ -1,24 +1,11 @@
-# 虚拟环境
 .venv/
-venv/
-env/
-
-# Python 缓存
 __pycache__/
-*.py[cod]
-*.pyo
-
-# 测试运行生成的临时结果和报告
-allure-result/
-allure-report/
 .pytest_cache/
-
-# 编辑器配置
+allure-results/
+allure-report/
 .idea/
 .vscode/
-
-# 敏感配置文件（如果有的话，比如本地密码，强烈建议加上）
-# config/local_settings.py
+.env
 
 #个人笔记
 经验.txt

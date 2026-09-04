@@ -1,0 +1,20 @@
+avatar_cases:
+  - case_name: "上传正常图片成功"
+    file_path: "data/test_files/normal_avatar.jpg"
+    expect_status: 200
+  - case_name: "上传超过2MB大图报错(边界值)"
+    file_path: "data/test_files/large_avatar.jpg"
+    expect_status: 422
+  - case_name: "上传非法格式文件报错"
+    file_path: "data/test_files/avatar.txt"
+    expect_status: 422
+  - case_name: "上传头像-未登录-权限校验"
+    operate: "unauth_upload"
+    file_path: "data/test_files/normal_avatar.jpg"
+    expect_status: 403
+
+remove_avatar_cases:
+  - case_name: "正常移除头像"
+    expect_status: 200
+  - case_name: "重复移除头像(幂等性测试)"
+    expect_status: 200

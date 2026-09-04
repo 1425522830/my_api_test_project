@@ -1,5 +1,5 @@
 requests
 pytest
-pyyaml
 allure-pytest
-pymysql
+pyyaml
+python-dotenv

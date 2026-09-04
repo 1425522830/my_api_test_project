@@ -1,82 +1,66 @@
-from config.settings import API_LOGIN, API_REGISTER, API_FORGOT, REQ_TIMEOUT, API_USERS,API_ACCESS_TOKENS, API_SESSIONS
+import mimetypes
+from config.settings import (API_LOGIN, API_REGISTER, API_FORGOT, REQ_TIMEOUT,
+                             API_USERS, API_ACCESS_TOKENS, API_SESSIONS, API_AVATAR, VERIFY_SSL)
 
-# 用户模块接口封装
 class UserApi:
     def __init__(self, client):
-        self.client = client        # 组合注入HTTP会话客户端，解耦优于继承
-    # 登录接口
-    def login(self, identification, password, remember=False):
-        req_body = {
-            "identification": identification,
-            "password": password,
-            "remember": remember
-        }
+        self.client = client
 
-        token = self.client.get_new_csrf_token()            # 获取一次性的游客 token
+    def login(self, identification, password, remember=False):
+        req_body = {"identification": identification, "password": password, "remember": remember}
+        token = self.client.get_new_csrf_token()
         full_url = f"{self.client.base_url}{API_LOGIN}"
         headers = {**self.client.session.headers, "X-CSRF-Token": token}
-
-        # Flarum 登录时必须使用“游客身份”且携带刚生成的 Token 进行提交。
-        # 这里使用原生 request，绕开了底层 `post` 自带的_极可能触发二次 GET 页面的逻辑。
         return self.client.session.request(
-            "POST", full_url, json=req_body, headers=headers, timeout=REQ_TIMEOUT, verify=False
+            "POST", full_url, json=req_body, headers=headers, timeout=REQ_TIMEOUT, verify=VERIFY_SSL
         )
 
-    # 注册接口
     def register(self, email, nickname, password, username):
-        req_body = {
-            "email": email,
-            "nickname": nickname,
-            "password": password,
-            "username": username
-        }
-        resp = self.client.post(path=API_REGISTER, json_data=req_body)
-        return resp
+        req_body = {"email": email, "nickname": nickname, "password": password, "username": username}
+        return self.client.post(path=API_REGISTER, json_data=req_body)
 
-    # 忘记密码
     def send_forgot_pwd_email(self, email: str):
-        req_body = {
-            "email": email
-        }
-        resp = self.client.post(path=API_FORGOT, json_data=req_body)
-        return resp
-    
-    # 更改个人资料（昵称、简介等）
+        return self.client.post(path=API_FORGOT, json_data={"email": email})
+
     def update_user_profile(self, user_id: int, nickname: str = None, bio: str = None):
-        req_body = {
-            "data": {
-                "type": "users",
-                "id": str(user_id),
-                "attributes": {}
-            }
-        }
-        if nickname is not None:
-            req_body["data"]["attributes"]["nickname"] = nickname
-        if bio is not None:
-            req_body["data"]["attributes"]["bio"] = bio
-
+        req_body = {"data": {"type": "users", "id": str(user_id), "attributes": {}}}
+        if nickname is not None: req_body["data"]["attributes"]["nickname"] = nickname
+        if bio is not None: req_body["data"]["attributes"]["bio"] = bio
         return self.client.patch(path=f"{API_USERS}/{user_id}", json_data=req_body)
 
-    # 更新用户偏好设置（通知、隐私等）支持部分更新
-    def update_user_preferences(self, user_id: int, preferences: dict):     # preferences 是一个字典
-        req_body = {
-            "data": {
-                "type": "users",
-                "id": str(user_id),
-                "attributes": {
-                    "preferences": preferences
-                }
-            }
-        }
-        # Flarum 标准更新属性接口，必须用 PATCH
+    def update_user_preferences(self, user_id: int, preferences: dict):
+        req_body = {"data": {"type": "users", "id": str(user_id), "attributes": {"preferences": preferences}}}
         return self.client.patch(path=f"{API_USERS}/{user_id}", json_data=req_body)
 
-    # 终止会话
+    def get_user_access_tokens(self, user_id: int):
+        return self.client.get(path=f"{API_USERS}/{user_id}/access-tokens")
+
     def revoke_access_token(self, token_id: int):
         return self.client.delete(path=f"{API_ACCESS_TOKENS}/{token_id}")
 
-    # 终止所有其他会话（安全设置内的批量退出）
     def revoke_all_other_sessions(self):
-        # 请求体为空 {}，因为是批量撤销，不需要传指定的 ID
         return self.client.delete(path=API_SESSIONS, json_data={})
 
+    def upload_avatar(self, user_id: int, file_path: str):
+        full_path = f"{self.client.base_url}{API_USERS}/{user_id}{API_AVATAR}"
+        content_type, _ = mimetypes.guess_type(file_path)
+        if content_type is None: content_type = 'application/octet-stream'
+        with open(file_path, 'rb') as f:
+            files = {'avatar': (file_path.split('/')[-1], f, content_type)}
+            headers = {
+                "X-CSRF-Token": self.client.get_new_csrf_token(),
+                "Referer": f"{self.client.base_url}/settings",
+                "Origin": self.client.base_url,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36"
+            }
+            return self.client.post_files(path=full_path, files=files, headers=headers)
+
+    def remove_avatar(self, user_id: int):
+        full_url = f"{self.client.base_url}{API_USERS}/{user_id}{API_AVATAR}"
+        token = self.client.get_new_csrf_token()
+        headers = {
+            "X-CSRF-Token": token,
+            "Referer": f"{self.client.base_url}/settings",
+            "Origin": self.client.base_url
+        }
+        return self.client.session.request("POST", full_url, headers=headers, timeout=REQ_TIMEOUT, verify=VERIFY_SSL)
