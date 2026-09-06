@@ -1,0 +1,13 @@
+INFO     common.session_client:session_client.py:34 发起请求: GET https://www.wangdanatest.top/api/tags
+INFO     common.session_client:session_client.py:56 响应状态: 200 | 耗时: 0.163689秒
+INFO     common.session_client:session_client.py:34 发起请求: POST https://www.wangdanatest.top/api/discussions
+WARNING  common.session_client:session_client.py:48 触发429限流，等待10秒后重试...
+INFO     common.session_client:session_client.py:56 响应状态: 201 | 耗时: 0.264033秒
+INFO     common.session_client:session_client.py:34 发起请求: GET https://www.wangdanatest.top/api/discussions/576
+INFO     common.session_client:session_client.py:56 响应状态: 200 | 耗时: 0.167404秒
+INFO     common.session_client:session_client.py:34 发起请求: PATCH https://www.wangdanatest.top/api/discussions/576
+INFO     common.session_client:session_client.py:56 响应状态: 200 | 耗时: 0.154171秒
+INFO     common.session_client:session_client.py:34 发起请求: GET https://www.wangdanatest.top/api/discussions/576
+INFO     common.session_client:session_client.py:56 响应状态: 200 | 耗时: 0.216873秒
+INFO     common.session_client:session_client.py:34 发起请求: PATCH https://www.wangdanatest.top/api/discussions/576
+INFO     common.session_client:session_client.py:56 响应状态: 200 | 耗时: 0.15412秒

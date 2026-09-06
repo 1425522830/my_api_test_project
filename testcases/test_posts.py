@@ -29,6 +29,8 @@ class TestPostManagement:
             post_api = PostApi(api.client)
             resp = post_api.get_discussion_detail(case["discussion_id"])
         elif case.get("operate") == "cross_user_edit":
+            if not login_client_b:
+                pytest.skip("未配置账号B，跳过越权测试")
             api_a, _ = login_client
             api_b, _ = login_client_b
             post_api_a = PostApi(api_a.client)

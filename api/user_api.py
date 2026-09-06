@@ -42,7 +42,7 @@ class UserApi:
         return self.client.delete(path=API_SESSIONS, json_data={})
 
     def upload_avatar(self, user_id: int, file_path: str):
-        full_path = f"{self.client.base_url}{API_USERS}/{user_id}{API_AVATAR}"
+        full_path = f"{API_USERS}/{user_id}{API_AVATAR}"
         content_type, _ = mimetypes.guess_type(file_path)
         if content_type is None: content_type = 'application/octet-stream'
         with open(file_path, 'rb') as f:

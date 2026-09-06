@@ -6,10 +6,10 @@ import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 from config.settings import BASE_URL, BASE_HEADERS, REQ_TIMEOUT, VERIFY_SSL
 
-urllib3.disable_warnings(InsecureRequestWarning)
+urllib3.disable_warnings(InsecureRequestWarning)        # 忽略因关闭证书校验产生的警告
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)                    # 日志打印
 
 class SessionClient:
     def __init__(self):
@@ -17,6 +17,7 @@ class SessionClient:
         self.base_url = BASE_URL
         self.session.headers.update(BASE_HEADERS)
 
+    # 项目机制，登录前需get一次页面，拿到一次性token
     def get_new_csrf_token(self):
         try:
             resp = self.session.get(self.base_url, timeout=REQ_TIMEOUT, verify=VERIFY_SSL)
@@ -68,6 +69,7 @@ class SessionClient:
     def delete(self, path, json_data=None):
         return self._base_request("DELETE", path, json_data=json_data)
 
+    # 文件上传
     def post_files(self, path, files=None, data=None, headers=None):
         full_url = f"{self.base_url}{path}"
         if headers:

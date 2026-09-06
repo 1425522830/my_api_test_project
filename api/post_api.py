@@ -39,10 +39,6 @@ class PostApi:
         if content is not None: req_body["data"]["attributes"]["content"] = content
         return self.client.patch(path=f"{API_POSTS}/{post_id}", json_data=req_body)
 
-    def delete_post(self, post_id):
-        req_body = {"data": {"type": "posts", "id": str(post_id), "attributes": {"isHidden": True}}}
-        return self.client.post(path=f"{API_POSTS}/{post_id}", json_data=req_body)
-
     def delete_discussion(self, discussion_id):
         req_body = {"data": {"type": "discussions", "id": str(discussion_id), "attributes": {"isHidden": True}}}
         return self.client.patch(path=f"{API_DISCUSSIONS}/{discussion_id}", json_data=req_body)

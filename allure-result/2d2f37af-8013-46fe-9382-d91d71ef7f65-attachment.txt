@@ -1,2 +1,0 @@
-INFO     common.session_client:session_client.py:34 发起请求: GET https://www.wangdanatest.top/api/discussions?filter[author]=575
-INFO     common.session_client:session_client.py:56 响应状态: 200 | 耗时: 0.146162秒
