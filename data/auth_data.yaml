@@ -1,54 +1,54 @@
 auth_login_cases:
   - case_name: "登录成功-记住登录状态"
     description: "使用合法账号和密码登录，并勾选记住密码"
-    identification: "1425522830@qq.com"
-    password: "6666666666"
+    identification: "${TEST_ACCOUNT}"
+    password: "${TEST_PWD}"
     remember: true
     expect_status: 200
   - case_name: "登录成功-不记住登录状态"
-    identification: "1425522830@qq.com"
-    password: "6666666666"
+    identification: "${TEST_ACCOUNT}"
+    password: "${TEST_PWD}"
     remember: false
     expect_status: 200
   - case_name: "登录失败-账号未注册"
     identification: "test99999@shturl."
-    password: "6666666666"
+    password: "${TEST_PWD}"
     remember: false
     expect_status: 401
   - case_name: "登录失败-密码错误"
-    identification: "1425522830@qq.com"
+    identification: "${TEST_ACCOUNT}"
     password: "wrongpass123"
     remember: false
     expect_status: 401
   - case_name: "登录失败-密码大小写敏感"
     identification: "1425522830@qq.com"
-    password: "6666666666"
+    password: "${TEST_PWD}"
     expect_status: 401
   - case_name: "登录失败-账号为空"
     identification: ""
-    password: "6666666666"
+    password: "${TEST_PWD}"
     remember: false
     expect_status: 401
   - case_name: "登录失败-密码为空"
-    identification: "1425522830@qq.com"
+    identification: "${TEST_ACCOUNT}"
     password: ""
     remember: false
     expect_status: 401
   - case_name: "登录失败-账号带前后空格"
-    identification: " 1425522830@qq.com "
-    password: "6666666666"
+    identification: "${TEST_ACCOUNT}"
+    password: "${TEST_PWD}"
     remember: false
     expect_status: 401
   - case_name: "登录失败-账号超长"
     identification: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    password: "6666666666"
+    password: "${TEST_PWD}"
     remember: false
     expect_status: 401
 
 auth_register_cases:
   - case_name: "注册异常-邮箱已存在"
-    username: "1425522830@qq.com"
-    email: "1425522830@qq.com"
+    username: "${TEST_ACCOUNT}"
+    email: "${TEST_ACCOUNT}"
     nickname: "测试用户01"
     password: "Aa123456"
     expect_status: 422
@@ -85,7 +85,7 @@ auth_register_cases:
 
 auth_forgot_cases:
   - case_name: "忘记密码-已注册邮箱发送成功"
-    email: "1425522830@qq.com"
+    email: "${TEST_ACCOUNT}"
     expect_status: 204
   - case_name: "忘记密码-未注册邮箱返回204"
     email: "no_user@test.com"

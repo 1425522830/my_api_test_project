@@ -8,12 +8,7 @@ class UserApi:
 
     def login(self, identification, password, remember=False):
         req_body = {"identification": identification, "password": password, "remember": remember}
-        token = self.client.get_new_csrf_token()
-        full_url = f"{self.client.base_url}{API_LOGIN}"
-        headers = {**self.client.session.headers, "X-CSRF-Token": token}
-        return self.client.session.request(
-            "POST", full_url, json=req_body, headers=headers, timeout=REQ_TIMEOUT, verify=VERIFY_SSL
-        )
+        return self.client.post(path=API_LOGIN, json_data=req_body)
 
     def register(self, email, nickname, password, username):
         req_body = {"email": email, "nickname": nickname, "password": password, "username": username}
