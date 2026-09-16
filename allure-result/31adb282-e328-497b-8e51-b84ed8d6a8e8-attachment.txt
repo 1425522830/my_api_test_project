@@ -1,0 +1,18 @@
+INFO     common.session_client:session_client.py:36 发起请求: POST https://www.wangdanatest.top/login
+INFO     common.session_client:session_client.py:58 响应状态: 200 | 耗时: 0.225047秒
+INFO     common.session_client:session_client.py:36 发起请求: GET https://www.wangdanatest.top/api/tags
+INFO     common.session_client:session_client.py:58 响应状态: 200 | 耗时: 0.161857秒
+INFO     common.session_client:session_client.py:36 发起请求: POST https://www.wangdanatest.top/api/discussions
+INFO     common.session_client:session_client.py:58 响应状态: 201 | 耗时: 0.282976秒
+INFO     common.session_client:session_client.py:36 发起请求: GET https://www.wangdanatest.top/api/discussions/654
+INFO     common.session_client:session_client.py:58 响应状态: 200 | 耗时: 0.173215秒
+INFO     common.session_client:session_client.py:36 发起请求: POST https://www.wangdanatest.top/api/posts
+WARNING  common.session_client:session_client.py:50 触发429限流，等待10秒后重试...
+INFO     common.session_client:session_client.py:58 响应状态: 201 | 耗时: 0.284186秒
+INFO     common.session_client:session_client.py:36 发起请求: POST https://www.wangdanatest.top/api/posts
+WARNING  common.session_client:session_client.py:50 触发429限流，等待10秒后重试...
+INFO     common.session_client:session_client.py:58 响应状态: 201 | 耗时: 0.259921秒
+INFO     common.session_client:session_client.py:36 发起请求: PATCH https://www.wangdanatest.top/api/posts/755
+INFO     common.session_client:session_client.py:58 响应状态: 200 | 耗时: 0.190442秒
+INFO     common.session_client:session_client.py:36 发起请求: PATCH https://www.wangdanatest.top/api/discussions/654
+INFO     common.session_client:session_client.py:58 响应状态: 200 | 耗时: 0.174377秒

@@ -30,6 +30,7 @@ class SessionClient:
             raise Exception("页面中未匹配到csrfToken，无法执行提交操作")
         return match_res.group(1)
 
+    # 把 token 并入 header，并设置限流后自动重试
     def _base_request(self, method, path, params=None, json_data=None):
         full_url = f"{self.base_url}{path}"
         logger.info(f"发起请求: {method} {full_url}")
@@ -69,7 +70,7 @@ class SessionClient:
     def delete(self, path, json_data=None):
         return self._base_request("DELETE", path, json_data=json_data)
 
-    # 文件上传
+    # 文件上传，用于头像上传功能
     def post_files(self, path, files=None, data=None, headers=None):
         full_url = f"{self.base_url}{path}"
         if headers:

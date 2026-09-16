@@ -7,8 +7,7 @@ from common.yaml_util import get_avatar_cases, get_remove_avatar_cases
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 pytestmark = pytest.mark.skip(
-    reason="【已提Bug】当前测试环境后端存在环境缺陷：手动上传成功(200)，脚本上传报500。为保证流水线正常，标记跳过，待开发修复后解除。")
-
+    reason="当前测试环境后端存在环境缺陷：手动上传成功(200)，脚本上传报500。标记跳过，待修复后解除。")
 
 @allure.feature("用户模块")
 class TestAvatar:

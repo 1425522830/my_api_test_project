@@ -53,7 +53,7 @@ post_management_cases:
     operate: "list"
     page_offset: -1
     sort: "-lastPostedAt"
-    expect_status: 200
+    expect_status: 400
   - case_name: "列表浏览-超大偏移量"
     operate: "list"
     page_offset: 99999

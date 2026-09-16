@@ -1,0 +1,4 @@
+INFO     common.session_client:session_client.py:36 发起请求: GET https://www.wangdanatest.top/api/tags
+INFO     common.session_client:session_client.py:58 响应状态: 200 | 耗时: 0.158156秒
+INFO     common.session_client:session_client.py:36 发起请求: POST https://www.wangdanatest.top/api/discussions
+INFO     common.session_client:session_client.py:58 响应状态: 422 | 耗时: 0.159371秒

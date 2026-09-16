@@ -7,7 +7,7 @@ from common.yaml_util import get_login_case, get_register_case, get_forgot_pwd_c
 @allure.story("账户认证")
 class TestLoginDDT:
     @allure.story("登录接口数据驱动测试")
-    @pytest.mark.parametrize("case", get_login_case(), ids=lambda x: x["case_name"])  # 修正为 case_name
+    @pytest.mark.parametrize("case", get_login_case(), ids=lambda x: x["case_name"])
     def test_login_interface(self, case, raw_client):
         user_api = UserApi(raw_client)
         account = case["identification"]

@@ -1,2 +1,0 @@
-INFO     common.session_client:session_client.py:34 发起请求: POST https://www.wangdanatest.top/api/forgot
-INFO     common.session_client:session_client.py:56 响应状态: 204 | 耗时: 1.491811秒

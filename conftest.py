@@ -4,13 +4,13 @@ from api.user_api import UserApi
 from api.post_api import PostApi
 from config.settings import TEST_ACCOUNT, TEST_PWD, TEST_ACCOUNT_B, TEST_PWD_B
 
-# 无需登录
+# 无需接口关联，用于登录相关用例
 @pytest.fixture(scope="function")
 def raw_client():
     c = SessionClient()
     yield c
 
-# 需要登录
+# 用于需要接口关联的登录后的有关用例，获得 用户id 便于后续用户相关操作
 @pytest.fixture(scope="session")
 def login_client():
     c = SessionClient()
@@ -25,7 +25,7 @@ def login_client():
     uid = resp_json["userId"]
     yield (api, uid)
 
-# 配置B账号测试越权
+# 配置B账号测试越权，未配置则跳过
 @pytest.fixture(scope="session")
 def login_client_b():
     if not TEST_ACCOUNT_B or not TEST_PWD_B:
@@ -37,7 +37,7 @@ def login_client_b():
         pytest.skip("测试账号B登录失败，跳过越权测试")
     yield (api, login_resp.json()["userId"])
 
-# 发布帖子
+# 创建帖子 —— 用于评论功能用例测试，须有一个帖子作为前置条件，便于数据闭环与自动清理，不写在帖子相关测试用例
 @pytest.fixture(scope="function")
 def new_discussion(login_client):
     api, current_uid = login_client

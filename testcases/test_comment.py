@@ -6,6 +6,8 @@ from common.yaml_util import get_comment_cases
 
 @allure.feature("评论模块")
 class TestComments:
+    @allure.title("评论全生命周期测试：发一级评论 -> 回复二级评论 -> 删除评论")
+    @allure.description("验证用户能正常发布评论、回复评论，并成功删除自己的评论，检查全链路的数据一致性。")
     @allure.story("评论生命周期闭环测试")
     def test_comment_lifecycle(self, new_discussion):
         post_api = new_discussion["post_api"]
@@ -29,6 +31,8 @@ class TestComments:
         resp = comment_api.create_post(discussion_id, case["content"])
         assert resp.status_code == case["expect_status"]
 
+    @allure.title("越权安全测试：账号A无法删除账号B的评论")
+    @allure.description("通过多账号隔离机制，验证横向越权防护，确保用户只能操作自己发布的内容，预期返回403或404。")
     @allure.story("评论模块-越权测试")
     def test_cross_user_delete_comment(self, new_discussion, login_client_b):
         if not login_client_b:

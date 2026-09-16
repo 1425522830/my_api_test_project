@@ -21,8 +21,9 @@ auth_login_cases:
     remember: false
     expect_status: 401
   - case_name: "登录失败-密码大小写敏感"
-    identification: "1425522830@qq.com"
-    password: "${TEST_PWD}"
+    identification: "${TEST_ACCOUNT_B}"
+    password: "x1425522830"
+    remember: false
     expect_status: 401
   - case_name: "登录失败-账号为空"
     identification: ""
@@ -35,7 +36,7 @@ auth_login_cases:
     remember: false
     expect_status: 401
   - case_name: "登录失败-账号带前后空格"
-    identification: "${TEST_ACCOUNT}"
+    identification: " ${TEST_ACCOUNT}"
     password: "${TEST_PWD}"
     remember: false
     expect_status: 401
